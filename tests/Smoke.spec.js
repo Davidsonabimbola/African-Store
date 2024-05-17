@@ -135,7 +135,8 @@ const amount = await total_Sum.split('.')
 })
 
 test('customer makes an order',{tag:'@second'}, async({page})=>{
-  const  product2 = 'Cocoyam Powder 40g'
+  test.setTimeout(120000);
+  const  product2 = 'Corn Starch 250G'
   const Shipping_Firstname = 'Aliyu'
   const ShippingLastname = 'Onanuga'
   const ShippingAddress = 'J Sutiste 52'
@@ -146,6 +147,7 @@ test('customer makes an order',{tag:'@second'}, async({page})=>{
   await MakeSpecific_orders.gotoLoginPage()
   await MakeSpecific_orders.placeOrder(product2)
   await MakeSpecific_orders.selectionAnd_checkout()
+  await page.waitForLoadState()
   await MakeSpecific_orders.shippingDetails(Shipping_Firstname,ShippingLastname,ShippingAddress,Shipping_Postalcode,Shippingcity)
   await page.waitForLoadState()
   await MakeSpecific_orders.provideEmail()
@@ -154,8 +156,8 @@ test('customer makes an order',{tag:'@second'}, async({page})=>{
   await MakeSpecific_orders.checkFor_discount(freedelivery_requirement)
   //await MakeSpecific_orders.applyGift_card()
   await page.waitForLoadState()
-  //await MakeSpecific_orders.continueTo_Payment()
-  //await MakeSpecific_orders.selectPayment()
+  await MakeSpecific_orders.continueTo_Payment()
+  await MakeSpecific_orders.selectPayment()
   
 })
 
@@ -170,41 +172,28 @@ test('multiple orders',{tag:'@third'},async({page})=>{
     const items_order = page.locator('[class="group scale-100 hover:scale-150 transition-all"]')
     for(const product of products){
       const items_orderCount = await items_order.count()
-      //let productFound = false;
-
       for (let i =0; i <items_orderCount; i++){
         const specOrder = await items_order.nth(i)
+        //await specOrder.waitFor({ state: 'visible', timeout: 10000 });
         const orderName = await specOrder.locator('[class="font-normal font-sans txt-medium text-ui-fg-subtle"]').textContent()
-
+        //await orderName.waitFor({ state: 'visible', timeout: 10000 });
+        await page.waitForLoadState()
         if (orderName.includes(product)){
           //await waitForLoadState()
 await specOrder.click()
+//await page.waitForTimeout(3000);
 const addToCart_section = await page.locator('[class="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12"]')
-//await waitForLoadState()
+await page.waitForLoadState()
+//await page.waitForTimeout(3000);
 const addToCart_Button = await addToCart_section.getByRole('button',{name:'Add to cart'})
 await addToCart_Button.click()
 const product_container = await page.locator('[class="flex gap-4 ml-[1em] small:ml-0 w-[300px] small:w-auto"]')
 const product_menu =await  product_container.locator('a').nth(1)
 await product_menu.click()
 
-//productFound = true;
 
         }
       }
-
-      //continue here
-// if(!productFound){
-//   expect( await page.locator('[class="text-ui-fg-subtle txt-compact-small w-full"]')).toBeTruthy()
-//   await page.waitForLoadState()
-// //const cart_box = await page.locator('[class="h-full z-50"]')
-// //await cart_box.locator('a').hover()
-// //await page.waitForLoadState()
-// await page.locator('[class="hover:text-ui-fg-base text-base ml-[-1em] md:ml-0 flex items-center gap-1"]').click() // cart div
-// // await page.waitForLoadState()
-// await page.locator('[class="bg-ui-bg-base hover:bg-ui-bg-base-hover border-ui-border-base transition-fg border-b [&_td:last-child]:pr-6 [&_th:last-child]:pr-6 [&_td:first-child]:pl-6 [&_th:first-child]:pl-6 w-full"]').click()
-//  const summary = page.locator('[class="flex flex-col gap-y-8 sticky top-12"]')
-//  await summary.getByRole('button',{name:'Go to checkout'}).click() //checkout button
-// }
         }
         
     

@@ -42,6 +42,7 @@ const specificOrders = (page)=>({
     async provideEmail(){
         const customerEmail_box = await page.locator('[class="flex relative z-0 w-full txt-compact-medium"]').nth(7)
         const customer_Email = await customerEmail_box.locator('input')
+        await page.waitForLoadState()
         await customer_Email.pressSequentially('lasgidi@yahoo.com')
     },
 
@@ -85,6 +86,7 @@ expect(page.locator('[class="justify-self-end text-ui-fg-base"]'))=== deliveryVa
        const mark_delivery= await page.locator('[class="flex items-center gap-x-4"]').nth(0)
        const radioButton_markDelivery = await mark_delivery.locator('button')
        const radioButton_markDelivery_div = await radioButton_markDelivery.locator('div')
+       await page.waitForTimeout(3000);
        await radioButton_markDelivery_div.click()
        //await radioButton_markDelivery.click()
         await page.waitForLoadState()
