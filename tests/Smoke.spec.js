@@ -137,16 +137,9 @@ const amount = await total_Sum.split('.')
 
 test('customer makes an order',{tag:'@second'}, async({page})=>{
   test.setTimeout(150000);
-  // const  product2 = 'Corn Starch 250G'
-  // const Shipping_Firstname = 'Aliyu'
-  // const ShippingLastname = 'Onanuga'
-  // const ShippingAddress = 'J Sutiste 52'
-  // const Shipping_Postalcode = '51006'
-  // const Shippingcity = 'Tallinn'
   const freedelivery_requirement = '35'
   const MakeSpecific_orders = makeSpecificOrders(page)
   await MakeSpecific_orders.gotoLoginPage()
-   //await MakeSpecific_orders.placeOrder(product2)
   await MakeSpecific_orders.placeOrder(dataset.product)
   await MakeSpecific_orders.selectionAnd_checkout()
   await page.waitForLoadState()
@@ -162,7 +155,6 @@ test('customer makes an order',{tag:'@second'}, async({page})=>{
   await MakeSpecific_orders.continueDelivery()
   await page.waitForLoadState()
   await MakeSpecific_orders.checkFor_discount(freedelivery_requirement)
-  //await MakeSpecific_orders.applyGift_card()
   await page.waitForLoadState()
   await MakeSpecific_orders.continueTo_Payment()
   
@@ -170,35 +162,26 @@ test('customer makes an order',{tag:'@second'}, async({page})=>{
 
 
 test('multiple orders',{tag:'@third'},async({page})=>{
+  test.setTimeout(150000);
   const orderTotal = []
-  const product1 = 'Cassava/kg'
-  const product2 = 'Cocoyam Powder 40g'
-  const product3 = 'Aashirvaad (Whole Wheat Flour) 5kg'
-  const products = ['Cassava/kg','Cocoyam Powder 40g','Aashirvaad (Whole Wheat Flour) 5kg']
+  const products = ['Corn Starch 250G','Cocoyam Powder 40g','Aashirvaad (Whole Wheat Flour) 5kg']
   await page.goto('https://debol-storefront.vercel.app/ee/store')
     const items_order = page.locator('[class="group scale-100 hover:scale-150 transition-all"]')
     for(const product of products){
       const items_orderCount = await items_order.count()
       for (let i =0; i <items_orderCount; i++){
         const specOrder = await items_order.nth(i)
-        //await specOrder.waitFor({ state: 'visible', timeout: 10000 });
         const orderName = await specOrder.locator('[class="font-normal font-sans txt-medium text-ui-fg-subtle"]').textContent()
-        //await orderName.waitFor({ state: 'visible', timeout: 10000 });
         await page.waitForLoadState()
-        if (orderName.includes(product)){
-          //await waitForLoadState()
+        if (orderName.includes(product)){       
 await specOrder.click()
-//await page.waitForTimeout(3000);
 const addToCart_section = await page.locator('[class="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12"]')
 await page.waitForLoadState()
-//await page.waitForTimeout(3000);
 const addToCart_Button = await addToCart_section.getByRole('button',{name:'Add to cart'})
 await addToCart_Button.click()
 const product_container = await page.locator('[class="flex gap-4 ml-[1em] small:ml-0 w-[300px] small:w-auto"]')
 const product_menu =await  product_container.locator('a').nth(1)
 await product_menu.click()
-
-
         }
       }
         }
