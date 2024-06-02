@@ -27,6 +27,7 @@ const specificOrders = (page)=>({
     async shippingDetails(Shipping_Firstname, ShippingLastname,ShippingAddress,Shipping_Postalcode, Shippingcity ){
         const customerDetails = await page.locator('[class="grid grid-cols-2 gap-4"]')
    const customerFirst_name = await customerDetails.locator('input').nth(0)
+   //await customerFirst_name.waitForLoadState()
    await customerFirst_name.pressSequentially(Shipping_Firstname)
    const customerLast_name = await customerDetails.locator('input').nth(1)
    await customerLast_name.pressSequentially(ShippingLastname)
@@ -76,32 +77,19 @@ expect(page.locator('[class="justify-self-end text-ui-fg-base"]'))=== deliveryVa
     }
     },
 
-    async applyGift_card(){
-        const giftCard_section = await page.locator('[class="w-full bg-white flex flex-col"]')
-    const giftcard_button = await giftCard_section.getByRole('button',{name:'Add gift card or discount code'})
-    await giftcard_button.click()
-    },
+    // async applyGift_card(){
+    //     const giftCard_section = await page.locator('[class="w-full bg-white flex flex-col"]')
+    // const giftcard_button = await giftCard_section.getByRole('button',{name:'Add gift card or discount code'})
+    // await giftcard_button.click()
+    // },
 
     async continueTo_Payment(){
-       const mark_delivery= await page.locator('[class="flex items-center gap-x-4"]').nth(0)
-       const radioButton_markDelivery = await mark_delivery.locator('button')
-       const radioButton_markDelivery_div = await radioButton_markDelivery.locator('div')
-       await page.waitForTimeout(3000);
-       await radioButton_markDelivery_div.click()
-       //await radioButton_markDelivery.click()
-        await page.waitForLoadState()
-        const makePayment =await page.locator('[class="bg-white"]').nth(1)
-        const Pay = makePayment.locator('div').nth(1)
-        const continuePayment_button = await Pay.getByRole('button',{name:'Continue to payment'})
-        await continuePayment_button.click()
+        await page.getByRole('radio',{name:'Debols Delivery'}).click() //select and click the radio button for delivery by debol
+       await  page.waitForLoadState()
+        await page.getByRole('button',{name: 'Continue to payment'}).click() //select and click on the continue payment button
+    
        
     },
-
-    async selectPayment(){
-        const mark_card = await page.locator('[class="flex items-center gap-x-4"]').nth(0)
-        const radioButton_payment = await mark_card.locator('button')
-        await radioButton_payment.click()
-    }
 
 })
 module.exports = specificOrders

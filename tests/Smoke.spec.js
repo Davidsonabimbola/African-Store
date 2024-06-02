@@ -1,5 +1,6 @@
 const {test, expect} = require('@playwright/test')
 const makeSpecificOrders = require('../pages/makeSpecificOrders')
+const dataset = JSON.parse(JSON.stringify(require('../utils/Testdata.json')))
 
 test('check order price functionalities', async({page})=>{
     let Total_price = []
@@ -135,20 +136,27 @@ const amount = await total_Sum.split('.')
 })
 
 test('customer makes an order',{tag:'@second'}, async({page})=>{
-  test.setTimeout(120000);
-  const  product2 = 'Corn Starch 250G'
-  const Shipping_Firstname = 'Aliyu'
-  const ShippingLastname = 'Onanuga'
-  const ShippingAddress = 'J Sutiste 52'
-  const Shipping_Postalcode = '51006'
-  const Shippingcity = 'Tallinn'
+  test.setTimeout(150000);
+  // const  product2 = 'Corn Starch 250G'
+  // const Shipping_Firstname = 'Aliyu'
+  // const ShippingLastname = 'Onanuga'
+  // const ShippingAddress = 'J Sutiste 52'
+  // const Shipping_Postalcode = '51006'
+  // const Shippingcity = 'Tallinn'
   const freedelivery_requirement = '35'
   const MakeSpecific_orders = makeSpecificOrders(page)
   await MakeSpecific_orders.gotoLoginPage()
-  await MakeSpecific_orders.placeOrder(product2)
+   //await MakeSpecific_orders.placeOrder(product2)
+  await MakeSpecific_orders.placeOrder(dataset.product)
   await MakeSpecific_orders.selectionAnd_checkout()
   await page.waitForLoadState()
-  await MakeSpecific_orders.shippingDetails(Shipping_Firstname,ShippingLastname,ShippingAddress,Shipping_Postalcode,Shippingcity)
+  await MakeSpecific_orders.shippingDetails
+  (dataset.first_Name,
+    dataset.last_Name, 
+    dataset.shipping_Address, 
+    dataset.shipping_Postalcode,
+     dataset.shiping_City)
+  //await MakeSpecific_orders.shippingDetails(Shipping_Firstname,ShippingLastname,ShippingAddress,Shipping_Postalcode,Shippingcity)
   await page.waitForLoadState()
   await MakeSpecific_orders.provideEmail()
   await MakeSpecific_orders.continueDelivery()
@@ -157,7 +165,6 @@ test('customer makes an order',{tag:'@second'}, async({page})=>{
   //await MakeSpecific_orders.applyGift_card()
   await page.waitForLoadState()
   await MakeSpecific_orders.continueTo_Payment()
-  await MakeSpecific_orders.selectPayment()
   
 })
 
